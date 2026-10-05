@@ -1,0 +1,3 @@
+<!-- Override the installed Android 17 vendor_boot fragment.
+     Recovery supplies its own HIDL boot/health services and manifests. -->
+<manifest version="1.0" type="framework"/>
