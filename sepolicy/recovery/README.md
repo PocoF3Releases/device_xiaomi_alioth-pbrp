@@ -14,8 +14,8 @@ Gain/calibration/register interfaces are deliberately not exposed here.
 
 Build and neverallow checks passed. In a temporary globally permissive audit,
 the labels applied and previous recovery DRM/backlight/RTC startup denials
-were absent. Physical menu/haptic validation and credential decryption with
-these labels remain pending. Shell diagnostic denials are not production
+were absent. Physical menu navigation, brightness and haptics passed user testing
+with patch 0008; credential decryption with these labels remains pending. Shell diagnostic denials are not production
 requirements.
 
 This is targeted device policy, not a fully enforcing PBRP conversion.

@@ -88,3 +88,11 @@ verified live in a globally permissive diagnostic image. Seven PBRP service
 domains remain permissive; a fully enforcing recovery is not validated.
 Do not convert property enumeration or diagnostic shell denials to broad
 allow rules. See sepolicy/recovery/README.md for remaining validation.
+
+Follow-up: recovery patch 0008 removes O_CREAT/O_TRUNC from the haptic
+sysfs writer and checks failed/short writes. Built and temporarily booted;
+user confirmed menu navigation, brightness and haptics. The fresh audit
+contained no AW8697 control denials after these actions. Compared common
+ROM policy: same AW8697 I2C and PM8150 RTC paths; gain/calibration and HAL
+permissions are not required for recovery timed playback.
+Remaining PBRP-wide denials and enforcing validation are still separate.
