@@ -135,7 +135,9 @@ interpreter was missing; command launch returned ENOENT. Recovery patch 0010
 prevents that bind/unmount for BOARD_USES_RECOVERY_AS_BOOT, leaving the OS at
 /system_root and preserving ramdisk shell/linker/services. User build and package/integrity checks passed. Temporarily booted on slot B:
 ADB shell works, ramdisk linker is present, recovery/Keymaster/keystore2 run and
-global SELinux is Enforcing. Password/Magisk acceptance is still pending.
+global SELinux is Enforcing. Final October-matched image: password decryption and bundled Magisk installation
+confirmed by the user; ADB reads twrp.all.users.decrypted=true and its shell/linker
+remain usable after installation.
 
 Packaging may use --metadata-boot with a previously ROM-matched header-v3
 recovery image to preserve its OS/security patch when the ROM ZIP is inaccessible.
@@ -145,13 +147,21 @@ Never access ~/evo/out. ~/pbrp-alioth/out is allowed for recovery work.
 The first guard restored initial command launch, but password/UI transitions
 could still move Android System onto /system. Patch 0011 blocks that switch;
 0012 isolates bundled Magisk's own mounts in an updater child namespace. ARM
-and ARM64 updater compilation and user Boot rebuild/package passed. Live final
-password/Magisk validation is in progress; initial guard alone was insufficient.
+and ARM64 updater compilation and user Boot rebuild/package passed. Final live
+password/Magisk validation passed on the October-matched image; initial guard
+alone was insufficient.
 
 Live Keymaster rejected metadata-key upgrade with INVALID_ARGUMENT (-38) when
 the Boot header carried September but the installed ROM reported 2026-10-01.
 Repackaging with verified October metadata restored the dm-backed Data mount
-on slot B. The packaged image uses 17.0.0 / 2026-10; password and Magisk final
-acceptance remain pending. Keep header metadata matched to the current ROM.
+on slot B. The packaged image uses 17.0.0 / 2026-10; password and bundled Magisk final
+acceptance passed (user-confirmed, with decrypted=true read over ADB). Keep header metadata matched to the current ROM.
 --security-patch YYYY-MM is permitted only with --metadata-boot for a verified
 installed-ROM patch override; --rom remains preferred for a new ROM package.
+
+Accepted October 9 candidate:
+- recovery_boot.img: 2da44881c418359a715b5f6563d0769947311f3feb4771d834e9583578807489
+- recovery.zip: f24afbee41f5663f2d3bf0924cc9c722487d1e98c476ce429c52acf4f13a9a61
+Temporary boot stayed on slot B. Bundled Magisk installation was confirmed;
+parent recovery shell/linker remained intact afterward. Standalone recovery.zip
+installation and subsequent Android boot were not retested in this cycle.
