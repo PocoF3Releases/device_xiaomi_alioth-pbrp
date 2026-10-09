@@ -126,3 +126,18 @@ ADB verified twrp.all.users.decrypted=true and global Enforcing.
 Only recovery remains permissive: the UI and co-located decryption/Binder
 services are not fully enforcing. Fastbootd flashing, postinstall and live
 ZIP install were not revalidated in this cycle. Do not overstate coverage.
+
+## October 9 System mount runtime fix
+
+The live UI worked but Magisk/decryption failed after Android System was bound
+over /system. ADB sync could read the OS shell, whose /system/bin/linker64
+interpreter was missing; command launch returned ENOENT. Recovery patch 0010
+prevents that bind/unmount for BOARD_USES_RECOVERY_AS_BOOT, leaving the OS at
+/system_root and preserving ramdisk shell/linker/services. User build and package/integrity checks passed. Temporarily booted on slot B:
+ADB shell works, ramdisk linker is present, recovery/Keymaster/keystore2 run and
+global SELinux is Enforcing. Password/Magisk acceptance is still pending.
+
+Packaging may use --metadata-boot with a previously ROM-matched header-v3
+recovery image to preserve its OS/security patch when the ROM ZIP is inaccessible.
+This cannot establish that the installed ROM matches; use --rom for a new ROM.
+Never access ~/evo/out. ~/pbrp-alioth/out is allowed for recovery work.

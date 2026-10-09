@@ -38,3 +38,7 @@ allowlist to recovery only. Recovery/0009 supplies logd's init-owned control
 socket. Device policy adds measured rootfs, keyring, scheduling and exact USB
 mode access. Recovery's shared UI/decryption domain remains permissive; do
 not describe this as a fully enforcing recovery.
+
+Recovery 0010 preserves the recovery-as-boot ramdisk /system runtime when
+mounting Android at /system_root. It also avoids unmounting recovery's /system.
+This prevents a mounted Android System from hiding recovery linker/shell/services.
