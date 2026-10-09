@@ -47,3 +47,19 @@ python3 device/xiaomi/alioth/tools/package-installer.py
 Deliverables: `out/release-candidate/recovery_boot.img`, `recovery.zip` and
 `SHA256SUMS`. ZIP signing uses the public AOSP test key, not a private release key.
 Development handoff: [Agents.md](Agents.md).
+
+## Recovery runtime and current ROM metadata
+
+Recovery patches 0010–0012 keep the installed Android System outside recovery's
+/system and isolate bundled Magisk mounts. The Boot OS/security-patch header must
+match the installed ROM, or Keymaster can reject metadata-encryption keys.
+For incremental work without the ROM ZIP, retain OS metadata from a previously
+matched Boot image and explicitly supply a verified current patch if it changed:
+
+```sh
+python3 device/xiaomi/alioth/tools/package-recovery.py \
+  --metadata-boot /path/to/previous-recovery.img --security-patch 2026-10
+```
+
+October 2026 is the observed current ROM patch, not a permanent default for all
+future releases. This does not authorize access to ~/evo/out.

@@ -12,6 +12,7 @@ parser = argparse.ArgumentParser(description=__doc__)
 metadata_source = parser.add_mutually_exclusive_group(required=True)
 metadata_source.add_argument("--rom", type=Path, help="Target Alioth ROM ZIP")
 metadata_source.add_argument("--metadata-boot", type=Path, help="Previously matched recovery Boot image; retain its OS/patch metadata")
+parser.add_argument("--security-patch", help="Verified installed-ROM patch YYYY-MM; override retained Boot metadata")
 args = parser.parse_args()
 root = Path(__file__).resolve().parents[4]
 product = root / "out/target/product/alioth"
@@ -46,6 +47,11 @@ else:
     if not version or not 1 <= month <= 12:
         raise SystemExit("Metadata source has missing/invalid OS or patch metadata")
     patch_level = f"{2000 + ((version >> 4) & 127):04d}-{month:02d}"
+if args.security_patch:
+    import re
+    if not args.metadata_boot or not re.fullmatch(r"20[0-9]{2}-(0[1-9]|1[0-2])", args.security_patch):
+        raise SystemExit("--security-patch requires --metadata-boot and valid YYYY-MM")
+    patch_level = args.security_patch
 policy = staging / "sepolicy"
 domains = set(subprocess.check_output([str(host / "sepolicy-analyze"), str(policy), "permissive"], text=True).split())
 expected = {"recovery"}

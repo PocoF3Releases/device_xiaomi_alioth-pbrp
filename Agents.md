@@ -141,3 +141,17 @@ Packaging may use --metadata-boot with a previously ROM-matched header-v3
 recovery image to preserve its OS/security patch when the ROM ZIP is inaccessible.
 This cannot establish that the installed ROM matches; use --rom for a new ROM.
 Never access ~/evo/out. ~/pbrp-alioth/out is allowed for recovery work.
+
+The first guard restored initial command launch, but password/UI transitions
+could still move Android System onto /system. Patch 0011 blocks that switch;
+0012 isolates bundled Magisk's own mounts in an updater child namespace. ARM
+and ARM64 updater compilation and user Boot rebuild/package passed. Live final
+password/Magisk validation is in progress; initial guard alone was insufficient.
+
+Live Keymaster rejected metadata-key upgrade with INVALID_ARGUMENT (-38) when
+the Boot header carried September but the installed ROM reported 2026-10-01.
+Repackaging with verified October metadata restored the dm-backed Data mount
+on slot B. The packaged image uses 17.0.0 / 2026-10; password and Magisk final
+acceptance remain pending. Keep header metadata matched to the current ROM.
+--security-patch YYYY-MM is permitted only with --metadata-boot for a verified
+installed-ROM patch override; --rom remains preferred for a new ROM package.

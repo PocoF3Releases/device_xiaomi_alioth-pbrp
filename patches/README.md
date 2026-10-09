@@ -42,3 +42,11 @@ not describe this as a fully enforcing recovery.
 Recovery 0010 preserves the recovery-as-boot ramdisk /system runtime when
 mounting Android at /system_root. It also avoids unmounting recovery's /system.
 This prevents a mounted Android System from hiding recovery linker/shell/services.
+
+Recovery 0011 prevents the UI/startup non-SAR mount-point switch from moving
+Android System to /system on recovery-as-boot. This closes the direct-mount path
+that bypassed 0010 during password/UI transitions.
+
+Recovery 0012 runs bundled Magisk in a private child mount namespace. Its own
+System mounts cannot hide the parent recovery runtime. Namespace setup failure
+aborts before running the updater; the Magisk ZIP remains unmodified.
