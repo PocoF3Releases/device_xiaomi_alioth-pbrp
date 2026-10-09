@@ -63,3 +63,12 @@ python3 device/xiaomi/alioth/tools/package-recovery.py \
 
 October 2026 is the observed current ROM patch, not a permanent default for all
 future releases. This does not authorize access to ~/evo/out.
+
+### Recovery-local installer signing
+
+After `lunch pb_alioth-user`, run `m -j4 signapk` in the recovery checkout
+before `python3 device/xiaomi/alioth/tools/package-installer.py`. Signing uses
+recovery-local JDK 17, SignApk, JNI libraries and AOSP public test keys. The
+packager fails before creating the ZIP if signing tools are missing. It never
+uses the ROM output directory. CRC, embedded image equality and both payload
+checksums are checked explicitly, including under optimized Python.

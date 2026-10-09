@@ -16,9 +16,10 @@ Magisk fallback, supported partitions and both active-slot ramdisk installers.
 The recovery series was replayed from its baseline and its final Git tree
 matched the built source exactly. Superseded Alioth patches are removed.
 
-The vendor patch allows recovery adbd to change context. The system policy
-patch permits only PBRP's seven upstream permissive recovery service domains
-in user recovery builds. Android policy and neverallow checks stay enabled.
+The first vendor patch allows recovery adbd to change context. The initial
+system policy patch provides the upstream recovery allowlist; the later 0002
+patches below narrow the final policy to the shared recovery domain only.
+Android policy and neverallow checks stay enabled.
 
 Recovery 0007 removes the FBE `/data/user/0` bind mount before Data unmount
 and verifies/removes the `userdata` metadata-encryption mapping before raw
